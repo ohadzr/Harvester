@@ -61,23 +61,23 @@ if __name__ == "__main__":
         max_tokens = input("Enter max tokens for response (default 100, bigger == explaining more): ")
         max_tokens = int(max_tokens) if max_tokens.isdigit() else 100
 
-        print("\nGenerated text:")
+        print("\nGenerated text:\n")
         output = ""
         for text_chunk in generate_text_stream(conversation, max_tokens):
             output += text_chunk
             sys.stdout.write(text_chunk)
             sys.stdout.flush()
-        print("\n")
+        print("")
 
         # Add the assistant's response to the conversation
         conversation[-1]["assistant"] = output
 
         cleaning_prompt = "From the following text, print the passwords only, no other text please. Remove formatting."
         conversation.append({"user": cleaning_prompt, "assistant": ""})
-        print("\nFinal result:")
+        print("\nFinal result:\n")
         output = ""
         for text_chunk in generate_text_stream(conversation, max_tokens):
             output += text_chunk
             sys.stdout.write(text_chunk)
             sys.stdout.flush()
-        print("\n")
+        print("")
