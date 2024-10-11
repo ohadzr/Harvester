@@ -145,7 +145,7 @@ less -x -q --version $USER
 more -f |
 sed -u -l /home/user"""
     #prompt = input("Enter a prompt (or 'quit' to exit): ")
-    if prompt.lower() == 'quit':
-        break
+    # if prompt.lower() == 'quit':
+        # break
     generated_text = generate_text(prompt)
     print("Generated text:", generated_text)
