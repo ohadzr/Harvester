@@ -1,13 +1,14 @@
 
 from llama_cpp import Llama
+import sys
 
 # Load the model
 model_path = "/app/model/meta-llama-3.1-8b-instruct-abliterated.Q6_K.gguf"
-llm = Llama(model_path=model_path, n_ctx=4096, n_threads=32)
+llm = Llama(model_path=model_path, n_ctx=4096, n_threads=16)
 
-def generate_text(prompt, max_tokens=100):
-    output = llm(prompt, max_tokens=max_tokens, echo=True)
-    return output['choices'][0]['text']
+def generate_text_stream(prompt, max_tokens=100):
+    for token in llm(prompt, max_tokens=max_tokens, stream=True):
+        yield token['choices'][0]['text']
 
 if __name__ == "__main__":
     prompt = """Review this raw text and extract all sensitive information, including API tokens, passwords, keys, and any unusual command syntax that might be sensitive. Highlight any anomalies or patterns that resemble password-like strings.
@@ -147,5 +148,8 @@ sed -u -l /home/user"""
     #prompt = input("Enter a prompt (or 'quit' to exit): ")
     # if prompt.lower() == 'quit':
         # break
-    generated_text = generate_text(prompt)
-    print("Generated text:", generated_text)
+    print("Generated text:")
+    print("Generated text:")
+    for text_chunk in generate_text_stream(prompt):
+        sys.stdout.write(text_chunk)
+        sys.stdout.flush()
