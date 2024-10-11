@@ -16,12 +16,14 @@ config = {
     "antiprompt": ["<|start_header_id|>", "<|eot_id|>"]
 }
 
-def generate_text_stream(prompt, max_tokens=50):
+def generate_text_stream(conversation, max_tokens=50):
     # Construct the full prompt with the correct structure
-    full_prompt = (
-        f"{config['pre_prompt_prefix']}{config['pre_prompt']}{config['pre_prompt_suffix']}"
-        f"{config['input_prefix']}{prompt}{config['input_suffix']}"
-    )
+    full_prompt = f"{config['pre_prompt_prefix']}{config['pre_prompt']}{config['pre_prompt_suffix']}"
+    for entry in conversation:
+        full_prompt += f"{config['input_prefix']}{entry['user']}{config['input_suffix']}{entry['assistant']}"
+
+    # Add the latest user prompt without assistant response
+    full_prompt += f"{config['input_prefix']}{conversation[-1]['user']}{config['input_suffix']}"
 
     full_response = ""
     for token in llm(full_prompt, max_tokens=max_tokens, stream=True):
@@ -32,9 +34,7 @@ def generate_text_stream(prompt, max_tokens=50):
         full_response += new_text
         yield new_text
 
-    # Remove the input prompt and system message from the full response
-    output_only = full_response.split(config['input_suffix'])[-1].strip()
-    return output_only
+    return full_response.strip()
 
 
 def get_multiline_input(prompt):
@@ -49,27 +49,35 @@ def get_multiline_input(prompt):
 
 
 if __name__ == "__main__":
+    conversation = []
     while True:
         prompt = get_multiline_input("Enter a prompt (or 'q' / 'quit' to exit). Press Enter twice to finish input:")
         if prompt.lower() == 'quit' or prompt.lower() == 'q':
             break
+
+        conversation.append({"user": prompt, "assistant": ""})
+
 
         max_tokens = input("Enter max tokens for response (default 50, bigger == explaining more): ")
         max_tokens = int(max_tokens) if max_tokens.isdigit() else 50
 
         print("\nGenerated text:")
         output = ""
-        for text_chunk in generate_text_stream(prompt, max_tokens):
+        for text_chunk in generate_text_stream(conversation, max_tokens):
             output += text_chunk
             sys.stdout.write(text_chunk)
             sys.stdout.flush()
-        print()
+        print("\n")
 
-        cleaning_prompt = "From the following text, print the passwords only, no other text please:\n\n" + output
+        # Add the assistant's response to the conversation
+        conversation[-1]["assistant"] = output
+
+        cleaning_prompt = "From the following text, print the passwords only, no other text please. Remove formatting."
+        conversation.append({"user": cleaning_prompt, "assistant": ""})
         print("\nFinal result:")
         output = ""
-        for text_chunk in generate_text_stream(prompt, max_tokens):
+        for text_chunk in generate_text_stream(conversation, max_tokens):
             output += text_chunk
             sys.stdout.write(text_chunk)
             sys.stdout.flush()
-        print()
+        print("\n")
