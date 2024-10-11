@@ -16,7 +16,7 @@ config = {
     "antiprompt": ["<|start_header_id|>", "<|eot_id|>"]
 }
 
-def generate_text_stream(conversation, max_tokens=50):
+def generate_text_stream(conversation, max_tokens=100):
     # Construct the full prompt with the correct structure
     full_prompt = f"{config['pre_prompt_prefix']}{config['pre_prompt']}{config['pre_prompt_suffix']}"
     for entry in conversation:
@@ -58,8 +58,8 @@ if __name__ == "__main__":
         conversation.append({"user": prompt, "assistant": ""})
 
 
-        max_tokens = input("Enter max tokens for response (default 50, bigger == explaining more): ")
-        max_tokens = int(max_tokens) if max_tokens.isdigit() else 50
+        max_tokens = input("Enter max tokens for response (default 100, bigger == explaining more): ")
+        max_tokens = int(max_tokens) if max_tokens.isdigit() else 100
 
         print("\nGenerated text:")
         output = ""
