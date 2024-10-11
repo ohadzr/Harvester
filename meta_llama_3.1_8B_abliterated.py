@@ -4,10 +4,10 @@ import sys
 
 # Load the model
 model_path = "/app/model/meta-llama-3.1-8b-instruct-abliterated.Q6_K.gguf"
-llm = Llama(model_path=model_path, n_ctx=4096, n_threads=4, temperature=0.5)
+llm = Llama(model_path=model_path, n_ctx=4096, n_threads=8, temperature=0.8)
 
 
-def generate_text_stream(prompt, max_tokens=300):
+def generate_text_stream(prompt, max_tokens=100):
     for token in llm(prompt, max_tokens=max_tokens, stream=True):
         new_text = token['choices'][0]['text']
         yield new_text
