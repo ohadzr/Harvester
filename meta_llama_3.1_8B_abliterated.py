@@ -6,7 +6,7 @@ import sys
 model_path = "/app/model/meta-llama-3.1-8b-instruct-abliterated.Q6_K.gguf"
 llm = Llama(model_path=model_path, n_ctx=4096, n_threads=16)
 
-def generate_text_stream(prompt, max_tokens=100):
+def generate_text_stream(prompt, max_tokens=300):
     for token in llm(prompt, max_tokens=max_tokens, stream=True):
         yield token['choices'][0]['text']
 
@@ -148,7 +148,6 @@ sed -u -l /home/user"""
     #prompt = input("Enter a prompt (or 'quit' to exit): ")
     # if prompt.lower() == 'quit':
         # break
-    print("Generated text:")
     print("Generated text:")
     for text_chunk in generate_text_stream(prompt):
         sys.stdout.write(text_chunk)
