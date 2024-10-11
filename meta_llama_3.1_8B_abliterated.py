@@ -50,8 +50,8 @@ def get_multiline_input(prompt):
 
 if __name__ == "__main__":
     while True:
-        prompt = get_multiline_input("Enter a prompt (or 'quit' to exit). Press Enter twice to finish input:")
-        if prompt.lower() == 'quit':
+        prompt = get_multiline_input("Enter a prompt (or 'q' / 'quit' to exit). Press Enter twice to finish input:")
+        if prompt.lower() == 'quit' or prompt.lower() == 'q':
             break
 
         max_tokens = input("Enter max tokens for response (default 50, bigger == explaining more): ")
@@ -65,7 +65,7 @@ if __name__ == "__main__":
             sys.stdout.flush()
         print()
 
-        cleaning_prompt = "From the last answer, print the results only, no other text please."
+        cleaning_prompt = "From the following text, print the passwords only, no other text please:\n\n" + output
         print("\nFinal result:")
         output = ""
         for text_chunk in generate_text_stream(prompt, max_tokens):
