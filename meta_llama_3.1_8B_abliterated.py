@@ -6,15 +6,23 @@ import sys
 model_path = "/app/model/meta-llama-3.1-8b-instruct-abliterated.Q6_K.gguf"
 llm = Llama(model_path=model_path, n_ctx=4096, n_threads=16)
 
-def generate_text_stream(prompt, max_tokens=131072):
+def generate_text_stream(prompt, max_tokens=100):
+    full_response = ""
     for token in llm(prompt, max_tokens=max_tokens, stream=True):
-        yield token['choices'][0]['text']
+        new_text = token['choices'][0]['text']
+        full_response += new_text
+        yield new_text
+
+    # Remove the input prompt from the full response
+    output_only = full_response[len(prompt):].lstrip()
+    return output_only
 
 if __name__ == "__main__":
     prompt = """Review this raw text and extract all sensitive information, including API tokens, passwords, keys, and any unusual command syntax that might be sensitive. Highlight any anomalies or patterns that resemble password-like strings.
 Give me the original text as it appears, without any formatting or processing.
 Find any suspicious flags, arguments, or commands that resemble password-like strings.
 Only write as output the sensitive information and nothing more.
+Don't over explain. 
 
 raw text:
 whoami -i --version --version -s ~/Documents
@@ -149,6 +157,14 @@ sed -u -l /home/user"""
     # if prompt.lower() == 'quit':
         # break
     print("Generated text:")
+    output = ""
     for text_chunk in generate_text_stream(prompt):
+        output += text_chunk
         sys.stdout.write(text_chunk)
         sys.stdout.flush()
+
+    # Clear the line and reprint the output without the prompt
+    sys.stdout.write('\r' + ' ' * len(output) + '\r')
+    sys.stdout.flush()
+    print(output.lstrip())
+    print()  # Add a newline after the complete response
