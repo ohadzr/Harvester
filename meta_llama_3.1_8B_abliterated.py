@@ -63,5 +63,13 @@ if __name__ == "__main__":
             output += text_chunk
             sys.stdout.write(text_chunk)
             sys.stdout.flush()
+        print()
 
+        cleaning_prompt = "From the last answer, print the results only, no other text please."
+        print("\nFinal result:")
+        output = ""
+        for text_chunk in generate_text_stream(prompt, max_tokens):
+            output += text_chunk
+            sys.stdout.write(text_chunk)
+            sys.stdout.flush()
         print()
