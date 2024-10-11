@@ -22,3 +22,13 @@ pip install -r requirements.txt
 ```
 python3 -m pip install llama-cpp-python
 ```
+
+
+## Running the container
+```aiignore
+source bin/activate
+# running build once
+docker build -t harvester .
+# If you prefer not to copy the model file into the Docker image, you can use a Docker volume:
+docker run -it -v /path/to/model/directory:/app/model harvester
+```
