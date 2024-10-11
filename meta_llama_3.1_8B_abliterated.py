@@ -4,7 +4,7 @@ import sys
 
 # Load the model
 model_path = "/app/model/meta-llama-3.1-8b-instruct-abliterated.Q6_K.gguf"
-llm = Llama(model_path=model_path, n_ctx=4096, n_threads=8)
+llm = Llama(model_path=model_path, n_ctx=131072, n_threads=4)
 
 # LM Studio configuration
 config = {
@@ -63,9 +63,3 @@ if __name__ == "__main__":
             output += text_chunk
             sys.stdout.write(text_chunk)
             sys.stdout.flush()
-
-        # Clear the line and reprint the output without the prompt
-        sys.stdout.write('\r' + ' ' * len(output) + '\r')
-        sys.stdout.flush()
-        print(output.lstrip())
-        print()  # Add a newline after the complete response
