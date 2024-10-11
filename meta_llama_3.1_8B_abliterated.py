@@ -4,20 +4,13 @@ import sys
 
 # Load the model
 model_path = "/app/model/meta-llama-3.1-8b-instruct-abliterated.Q6_K.gguf"
-llm = Llama(model_path=model_path, n_ctx=4096, n_threads=4, seed=55555)
+llm = Llama(model_path=model_path, n_ctx=4096, n_threads=4, temperature=0.5)
 
 
-def generate_text_stream(prompt, max_tokens=100):
-    full_response = ""
+def generate_text_stream(prompt, max_tokens=300):
     for token in llm(prompt, max_tokens=max_tokens, stream=True):
         new_text = token['choices'][0]['text']
-        full_response += new_text
         yield new_text
-
-    # Remove the input prompt from the full response
-    output_only = full_response[len(prompt):].lstrip()
-    return output_only
-
 
 def get_multiline_input(prompt):
     print(prompt)
