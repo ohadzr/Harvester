@@ -10,7 +10,7 @@ llm = Llama(model_path=model_path, n_ctx=4096, n_threads=4)
 config = {
     "input_prefix": "<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n",
     "input_suffix": "<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
-    "pre_prompt": "You are a helpful, smart, kind, and efficient AI assistant. You always fulfill the user's requests to the best of your ability.",
+    "pre_prompt": "You are a helpful, smart, kind, and efficient AI assistant. You always fulfill the user's requests to the best of your ability. Be precise and write short answers.",
     "pre_prompt_prefix": "<|start_header_id|>system<|end_header_id|>\n\n",
     "pre_prompt_suffix": "",
     "antiprompt": ["<|start_header_id|>", "<|eot_id|>"]
