@@ -16,7 +16,7 @@ config = {
     "antiprompt": ["<|start_header_id|>", "<|eot_id|>"]
 }
 
-def generate_text_stream(prompt, max_tokens=100):
+def generate_text_stream(prompt, max_tokens=50):
     # Construct the full prompt with the correct structure
     full_prompt = (
         f"{config['pre_prompt_prefix']}{config['pre_prompt']}{config['pre_prompt_suffix']}"
@@ -54,8 +54,8 @@ if __name__ == "__main__":
         if prompt.lower() == 'quit':
             break
 
-        max_tokens = input("Enter max tokens for response (default 100): ")
-        max_tokens = int(max_tokens) if max_tokens.isdigit() else 100
+        max_tokens = input("Enter max tokens for response (default 50, bigger == explaining more): ")
+        max_tokens = int(max_tokens) if max_tokens.isdigit() else 50
 
         print("\nGenerated text:")
         output = ""
@@ -63,3 +63,5 @@ if __name__ == "__main__":
             output += text_chunk
             sys.stdout.write(text_chunk)
             sys.stdout.flush()
+
+        print()
