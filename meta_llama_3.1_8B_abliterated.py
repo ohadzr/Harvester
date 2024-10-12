@@ -72,7 +72,7 @@ if __name__ == "__main__":
         # Add the assistant's response to the conversation
         conversation[-1]["assistant"] = output
 
-        cleaning_prompt = "From the following text, print the passwords only, no other text please. Remove formatting."
+        cleaning_prompt = "From the last prompt, print the results only, no other text please. Remove formatting."
         conversation.append({"user": cleaning_prompt, "assistant": ""})
         print("\nFinal result:\n")
         output = ""
