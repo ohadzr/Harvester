@@ -12,15 +12,15 @@ config = {
     "input_suffix": "<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
     "pre_prompt": "You are a helpful, smart, kind, and efficient AI assistant. You always fulfill the user's requests to the best of your ability.",
     "pre_prompt_prefix": "<|start_header_id|>system<|end_header_id|>\n\n",
-    "pre_prompt_suffix": "",
+    "pre_prompt_suffix": "<|eot_id|>",
     "antiprompt": ["<|start_header_id|>", "<|eot_id|>"]
 }
 
 def generate_text_stream(conversation, max_tokens=100):
     # Construct the full prompt with the correct structure
     full_prompt = f"{config['pre_prompt_prefix']}{config['pre_prompt']}{config['pre_prompt_suffix']}"
-    for entry in conversation:
-        full_prompt += f"{config['input_prefix']}{entry['user']}{config['input_suffix']}{entry['assistant']}"
+    for entry in conversation[:-1]:  # All but the last entry
+        full_prompt += f"{config['input_prefix']}{entry['user']}{config['input_suffix']}{entry['assistant']}<|eot_id|>"
 
     # Add the latest user prompt without assistant response
     full_prompt += f"{config['input_prefix']}{conversation[-1]['user']}{config['input_suffix']}"
