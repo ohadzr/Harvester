@@ -4,7 +4,7 @@ import sys
 
 # Load the model
 model_path = "/app/model/meta-llama-3.1-8b-instruct-abliterated.Q6_K.gguf"
-llm = Llama(model_path=model_path, n_ctx=4096, n_threads=4, verbose=False)
+llm = Llama(model_path=model_path, n_ctx=4096, n_threads=4, temperature=0.7, verbose=False)
 
 # LM Studio configuration
 config = {
